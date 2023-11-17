@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <script src="../node_modules/jquery/dist/jquery.js"></script>
+    <script src="../node_modules/jquery.cookie/jquery.cookie.js"></script>
+    <script>
+        $(function(){
+            $("#h").html($.cookie("userid"))
+            $("button").click(function(){
+                $.removeCookie("userid")
+                location.href="user-login.html"
+            })
+        })
+    </script>
+    <style>
+     body{
+         background-position: center;
+         background-repeat: no-repeat;
+         background-size: cover;
+     }
+     a{
+        text-decoration: none;
+        justify-content: center;
+        text-align: center;
+    
+     }
+    </style>
+</head>
+<body background="images/docs/usehome.png">
+    <nav class="justify-content-center align-content-center align-items-center" style="margin-top: 100px;">
+        <div style="margin-left: 580px; margin-top:-50px; font-weight: bold;" > <p style="color: gray; font-size: 17px;" >Wellcome to home-page<br><span id="h"></span></p></div>
+    <div style="margin-left: 550px; margin-bottom: -200px;">
+        <br>
+   <a href="adminhome.html" class="form-control w-25 rounded rounded-4" style="background-color: blue; color: white;" >youtube videos</a>
+   <button class="form-control w-25 rounded rounded-4 mt-1 btn btn-success" >logout</button>
+    <button class="form-control w-25 rounded rounded-4 mt-1" style="background-color: red; color: white;" >Cancle</button>
+    </div>
+    </nav>
+</body>
+</html>

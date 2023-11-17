@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link  rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+    <link  rel="stylesheet"href="../node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <script src="../node_modules/jquery/dist/jquery.js"></script>
+    <script src="../node_modules/jquery.cookie/jquery.cookie.js"></script>
+    <script>
+        $(function(){
+            $("button").click(function(){
+                $.cookie("userid",$("#userid").val())
+                location.href="user-home-page.html"
+            })
+        })
+    </script>
+    <style>
+        form{
+            border:1px solid black;
+            text-align: center;
+            align-items: center;
+            margin-top: 200px;
+            width: 500px;
+            padding: 50px;
+            background-color: white;
+          
+        }
+    </style>
+</head>
+<body style="background-color: gray;">
+    <form style="margin-left: 400px;" class="rounded rounded-5">
+        <dl>
+            <dt style="font-family: arial; margin-bottom: 10px;" class="bi bi-person-fill" >User Name</dt>
+            <hr style="width: 250px; margin-left: 70px;">
+            <dd><input type="text " id="userid" style="margin-bottom: 10px;" class="form-control"></dd>
+            <dt  style="font-family: arial; margin-bottom: 10px;" class="bi bi-key-fill">User Password</dt>
+            <hr style="width: 250px; margin-left: 70px;">
+            <dd><input type="password" id="password"class="form-control"></dd>
+        </dl>
+    </form>
+    <button class="form-control  btn btn-primary rounded rounded-5 p-3" style="margin-left: 450px; width: 400px;">Login</button>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Videos</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+    <script src="../node_modules/jquery/dist/jquery.js"></script>
+    <script>
+        function loadcatagory(){
+            $.ajax({
+                method:"get",
+                url:"http://127.0.0.1:4137/categories",
+                success:function(categories){
+                    categories.unshift({categoryid:1,categoryname:"selectcategory"})
+                    categories.map(function(allcategory){
+                        $(`<option value=${allcategory.categoryid}>
+                            ${allcategory.categoryname}
+                            </option>`).appendTo("#categorys")
+                    })
+                }
+                
+            })
+        }
+       $(function(){
+            loadcatagory()
+            $("#btnclick").click(function(){
+               var video= {
+                    videoid:parseInt($("#videoid").val()),
+                    videoname:$("#videoname").val(),
+                    liks:parseInt($("#liks").val()),
+                    subscribers:$("#subscribers").val(),
+                    videourl:$("#videoURL").val(),
+                    videofaculty:$("#videofaculty").val(),
+                    videotitle:$("#categorys").val()
+                    
+                }
+                $.ajax({
+                    method:"post",
+                    url:"http://127.0.0.1:4137/addvideos",
+                    data:video,  
+                })
+                alert("video insert successfully")
+                location.href="adminhome.html"
+            })
+       })
+    </script>
+</head>
+<body background="images/docs/youtube3.png">
+    <form class="border border-2 w-50 h-50 justify-content-between align-content-center" style="padding:70px;margin-left: 300px;background-color: gray;color: aliceblue;font-family: arial;" >
+     <h3 style="margin-left: 220px;margin-top: -50px;">Addvideos</h3>
+     <button class="w-100 mb-5" style="color: brown;"></button>
+     <dl>
+        <dt>video id</dt>
+        <dd><input type="number" id="videoid" class="form-control"></dd>
+        <dt>videoname</dt>
+        <dd><input type="text" id="videoname" class="form-control"></dd>
+        <dt>liks</dt>
+        <dd><input type="number" id="liks" class="form-control"></dd>
+        <dt>subscribers</dt>
+        <dd><input type="number" id="subscribers" class="form-control" ></dd>
+        <dt>videoURL</dt>
+        <dd><input type="text" id="videoURL" class="form-control"></dd>
+        <dt>videofaculty</dt>
+        <dd><input type="text" id="videofaculty" class="form-control"></dd>
+           <dt>category</dt>
+           <dd>
+            <select id=categorys>
+
+            </select>
+           </dd> 
+        </dl>
+    </form>
+        <button id="btnclick" style="margin-left: 300px; width: 675px;"class="btn btn-primary" >Add video</button>
+</body>
+</html>

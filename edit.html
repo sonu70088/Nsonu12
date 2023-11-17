@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Videos</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+    <script src="../node_modules/jquery/dist/jquery.js"></script>
+    <script>
+        
+        $(function(){
+            var videoid=localStorage.getItem("videoid")
+            $.ajax({
+                method:"get",
+                url:`http://127.0.0.1:4137/videos/${videoid}`,
+                success: (function(video){
+                    $("#userid").val(video[0].videoid)
+                    $("#videoname").val(video[0].videoname)
+                    $("#liks").val(video[0].liks)
+                    $("#subscribers").val(video[0].suscribers)
+                    $("#url").val(video[0].videourl)
+                    $("#faculty").val(video[0].videofaculty)
+                })
+            })
+             loadcategories()
+
+             $("#save").click(function(){
+            var video={
+             userid:parseInt($("#userid").val()),
+             videoname:$("#videoname").val(),
+             liks:parseInt($("#liks").val()),
+             subscribers:parseInt($("#subscribers").val()),
+             url:$("#url").val(),
+             faculty:$("#faculty").val()
+            }
+            $.ajax({ 
+                method:"put",
+                url:`http://127.0.0.1:4137/videos/${video.userid}`,
+                data:video
+             })
+             alert("video modify success")
+             location.href="adminhome.html"
+        })
+        })
+        function loadcategories() {
+            $.ajax({
+                method: "get",
+                url: "http://127.0.0.1:4137/categories",
+                success: (function (category) {
+                    category.map(function (allcategory) {
+                        $(`<option value=${allcategory.categoryid}>${allcategory.categoryname}</option>`).appendTo("#categories")
+                    })
+                })
+            })
+        }
+    </script>
+</head>
+
+<body background="images/docs/youtube3.png">
+    <form  class="border border-2 w-50 h-50" style="padding:70px;margin-left: 300px;background-color: gray;color: aliceblue;font-family: arial;">
+    <h3 style="margin-left: 200px;margin-bottom: 20px;">Edit video</h3>
+    <button class="w-100 mb-5"></button>
+    <dl>
+        <dt>videoid</dt>
+        <dd><input type="number" id="userid" class="form-control"> </dd>
+        <dt>videoname</dt>
+        <dd><input type="text" id="videoname" class="form-control"></dd>
+        <dt>liks</dt>
+        <dd><input type="number" id="liks" class="form-control"></dd>
+        <dt>subscribers</dt>
+        <dd><input type="number" id="subscribers" class="form-control"></dd>
+        <dt>videoURL</dt>
+        <dd><input type="text" id="url" class="form-control"></dd>
+        <dt>videofaculty</dt>
+        <dd><input type="text" id="faculty" class="form-control"></dd>
+        <dt>categories</dt>
+        <dd>
+            <select id="categories" class="p-1">
+
+            </select>
+        </dd>
+    </dl>
+</form>
+    <button id="save"class="btn btn-success w-50" style="margin-left: 300px;">save</button>
+</body>
+
+</html>

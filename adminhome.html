@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>admin home</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <script src="../node_modules/jquery/dist/jquery.js"></script>
+    <script>
+          function loadvalue(){
+            $.ajax({
+                method:"get",
+                url:`http://127.0.0.1:4137/videos`,
+                success:function(video){
+                    video.map(function(videos){
+                        $(`<tr>
+                              <td>${videos.videoname}</td>
+                              <td><iframe src=${videos.videourl} width="800" height="300"></iframe></td>
+                              <td>${videos.videofaculty}</td>
+                              <td>
+                                  <button value=${videos.videoid}  id="btnedit" class="btn btn-primary">Edit</button>
+                                  <button value=${videos.videoid} id="btndelete" class="btn btn-danger">Delete</button>
+                                </td>
+                            </tr>`).appendTo("tbody")
+                    })
+                }
+            })
+          }
+          $(function(){
+            loadvalue()
+            $("#btnclick").click(function(){
+                location.href="addvideo.html"
+            })
+            $(document).on("click","#btnedit",function(e){
+              localStorage.setItem("videoid",e.target.value)
+              location.href="edit.html"
+               
+            })
+            $(document).on("click","#btndelete",function(e){
+            var videoid=parseInt($("#videoid").val())
+            var flag=confirm("are you sure delete the the video")
+            if(flag==true){
+                $.ajax({
+                    method:"delete",
+                    url:`http://127.0.0.1:4137/delete/${videoid}`
+                })
+                alert("video deleted")
+                location.reload()
+            }
+            })
+          })
+    </script>
+</head>
+<body background="images/docs/youtube-template-3d-illustration_665513-18.png"text="white" style="color: white;">
+    <h3 style="margin-left: 400px; color:blue ;font-family: Arial; " class="mt-3">WELL COME TO ADMIN HOME PAGE</h3>
+    <button id="btnclick" class="btn btn-success">Add new video</button>
+    <table border="1"width=1200px>
+        <thead>
+            <tr>
+                <th>Video Name</th>
+                <th> View Videos</th>
+                <th>Video Faulty</th>
+                <th>Edit/delete</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</body>
+</html>

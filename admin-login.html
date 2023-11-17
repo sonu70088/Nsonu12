@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>admin login</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <script src="../node_modules/jquery/dist/jquery.js"></script>
+    <style>
+    </style>
+    <script>
+        $(function(){
+            $("#login").click(function(){
+               var adminname=$("#name").val()
+               var adminpassword=$("#password").val() 
+               $.ajax({
+                method:"get",
+                url:"http://127.0.0.1:4137/admin",
+                success:function(user){
+                    user.map(function(admin){
+                        if(admin.adminusername==adminname && admin.adminpassword==adminpassword){
+                            location.href="adminhome.html";
+                          }else{
+                         $("p").html("you enter incorrect admin please write correct admin name").css("color")
+
+                        }
+                    })
+                }
+                
+               })
+            })
+        })
+    </script>
+</head>
+<body text="white";style="font-family:arial; " background="../public/images/docs/youtube2.jpg">
+    <form class="border border-2" style="margin-left: 158px; margin-top: 205px; background-color: gray; color: aliceblue;width: 680px;padding:50px;height: 325px;"  >
+   <h3 >Well come to admin</h3> 
+   <button style="width: 600px;color: white;" ></button>
+   <dl>
+    <dt>Admin-name</dt>
+    <dd><input type="text" name="text" id="name" class="form-control"></dd>
+    <dt>Admin password</dt>
+    <dd><input type="password" id="password" name="password" class="form-control"></dd>
+   </dl>
+   </form>
+   <button id="login" style="margin-left:158px;" class="btn btn-primary w-50"class="form-control" >admi login</button>
+   <p style="margin-left:158px;"></p>
+</body>
+</html>
