@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../../node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../../../node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <script>
+      function categories(){
+        fetch("https://fakestoreapi.com/products/categories")
+        .then((objects)=>{
+          return objects.json()
+        })
+        .then((object)=>{
+          object.unshift("all")
+          object.map(function(categories){
+            var option=document.createElement("option")
+            option.value=categories
+            option.text=categories.toUpperCase()
+            document.getElementById("lstcategories").appendChild(option)
+
+          })
+        })
+      }
+      function bodyload(){
+        categories()
+        loadcategories("https://fakestoreapi.com/products")
+        cartcount()
+      }
+      function productchange(){
+    var lstcategories=document.getElementById("lstcategories").value
+    if(lstcategories=="all"){
+      loadcategories("https://fakestoreapi.com/products")
+    }else{
+      loadcategories(`https://fakestoreapi.com/products/category/${lstcategories}`)
+    }
+      }
+  function loadcategories(url){
+    document.querySelector("main").innerHTML=""
+    fetch(url)
+    .then((obj)=>{
+      return obj.json()
+    })
+    .then((product)=>{
+      product.map((allproduct)=>{
+        var div=document.createElement("div")
+        div.className="card m-3 p-3"
+        div.width="100px"
+       div.innerHTML=`
+        <img class="card-image-top" height="100"width="150px" src=${allproduct.image}>
+        <div class="card-header overflow-auto" style="height:50px">
+         <p> ${allproduct.title}</p>
+          </div>
+        <div class="card-body  ">
+        <dl>
+          <dt>price<dt>
+        <dd> ${allproduct.price}</dd>
+        <dt> ratting</dt>
+        <dd><span class="bi bi-star">${allproduct.rating.rate}</span></dd>
+         <dl>
+          </div>  
+        <div class="card-footer">
+          <button class="btn btn-danger form-control"><span class="bi bi-cart" onclick="adclick(${allproduct.id})">Add to cart</span></button>
+          </div>  
+       `
+       document.querySelector("main").appendChild(div)
+      })
+    })
+  }
+  var cartlist=[]
+  function cartcount(){
+    var lblcount=document.getElementById("lblcount").innerHTML=cartlist.length
+  }
+  function adclick(id){
+   fetch(`https://fakestoreapi.com/products/${id}`)
+   .then((response)=>{
+    return response.json()
+   })
+   .then((addproduct)=>{
+    cartlist.push(addproduct)
+    alert(`${addproduct.title}\n Add to Cart`)
+    cartcount()
+   })
+  }
+   function showproduct(){
+    document.querySelector("tbody").innerHTML=""
+    cartlist.map((allcartlist)=>{
+    var tr=document.createElement("tr")
+    var titletd=document.createElement("td")
+    var riview=document.createElement("td")
+    var tddelete=document.createElement("button")
+    tddelete.innerHTML=`<span class="bi bi-trash-fill" onclick="deleteclick(${allcartlist.id})"></span>`.fontcolor("red")
+    riview.innerHTML=`<img src=${allcartlist.image} width="100px" height="100px">`
+    titletd.innerHTML=`${allcartlist.title}`
+    tr.appendChild(titletd)
+    tr.appendChild(riview)
+    tr.appendChild(tddelete)
+    document.querySelector("tbody").appendChild(tr)
+  })
+
+   }
+   function navclick(cartname){
+    if(cartname=="home"){
+      loadcategories("https://fakestoreapi.com/products")
+    }else{
+      loadcategories(`https://fakestoreapi.com/products/category/${cartname}`)
+    }}
+     function deleteclick(id){
+      document.querySelector("tbody").innerHTML=""
+      fetch(`https://fakestoreapi.com/products/${id}`)
+      .then((del)=>{
+        return del.json() 
+      })
+      .then((delprodut)=>{
+        cartlist.splice(delprodut,`${delprodut.id}`)
+        alert(`${delprodut.title}\n product deleted`)
+        cartcount()
+      })
+     }
+    </script>
+    <style>
+      a{
+        color: red;
+        text-decoration: none;
+      }
+    </style>
+</head>
+<body class="container-fluid"onload="bodyload()" style="background-color: gray;">
+<script src="../../../node_modules/jquery/dist/jquery.js"></script>
+<script src="../../../node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>  
+<header class="bg-dark text-white d-flex justify-content-between mt-2 p-4">
+  <div style="font-size: 30px; font-family: arial;">
+    .Shopper
+  </div>
+  <div style="font-family: arial;">
+    <nav class="navtapp">
+    <span class="me-4"><a href="javascript:navclick(`home`)">HOME</a></span>
+   <span class="me-4"><a href="javascript:navclick(`electronics`)">Electronics</a></span>
+    <span class="me-4"><a href="javascript:navclick(`jewelery`)">jewelery</a></span>
+    <span class="me-4"><a href="javascript:navclick(`men's clothing`)">Men's Clothing</a></span>
+    <span class="me-4"><a href="javascript:navclick(`women's clothing`)">Womens Clothing</a></span>
+    </nav>
+  </div>
+  <div>
+     <span class="bi bi-search me-4"></span>
+     <span class="bi bi-person  me-4" ></span>
+     <span class="bi bi-heart  me-4" ></span>
+
+      <button class="btn position-relative btn-light" data-bs-target="#cardmodal" data-bs-toggle="modal" onclick="showproduct()" id="modalid">
+        <span class="bi bi-cart4" class="me-4"></span>
+      <span class="badge bg-danger rounded rounded-circle position-absolute  end-0 top-0" class="me-4" id="lblcount"></span>
+     </button>
+     <div class="modal" id="cardmodal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h3 class="text-black">Your Order Products</h3>
+                  <button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                  
+                <div class="modal-body">
+                     <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th>title</th>
+                          <th>review</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                      </tbody>
+                     </table>
+                </div>
+
+              </div>
+
+            </div>
+     </div>
+  </div>
+</header>
+<section class="row mt-4">
+  <nav class="col-2 ">
+    <div>
+    <label class="fw-bold form-lable " style="font-size: 20px; font-family: arial;">Select categories</label>
+    <div>
+      <select class="form-select" id="lstcategories" onchange="productchange()">
+
+      </select>
+    </div>
+    </div>
+  </nav>
+  <main class="col-10 d-flex overflow-auto flex-wrap " style="height: 500px ;">
+       
+  </main>
+</section>
+</body>
+</html>
